@@ -70,7 +70,20 @@ Validate the result on set of test data (20 values)
 ```{r}
 
 df2 <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!") )
-df2<- as.data.frame(lapply(df2,as.numeric))
+
+df2<- as.data.frame(lapply(df2[-ncol(df2)],as.numeric))
 
 
+df2 <- df2[features[features!='classe']]
+answers <- predict(rf, newdata=df2)
 answers
+
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+
+pml_write_files(answers)

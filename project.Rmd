@@ -33,7 +33,7 @@ df <- df[features]
 str(df)
 
 ```
-Now we have data frame with 120 columns and 19622 data examples. Let load libraries for data mining
+Now we have data frame with 120 columns and 19622 data examples. I implement random forest this project but have no time to see any other methods. Now we load libraries for data mining
 ```{r}
 
 library(caret)
@@ -59,14 +59,20 @@ randomForest(trainx, trainy, ntree=ntree)
 }
 ```
 
-Evaluate on test data.
+In sample error rate:
 ```{r}
-
+prediction <- predict(rf, newdata=trainDat)
+confusionMatrix(prediction,trainDat$classe)[3]
+```
+We see that high accuracy which in-sample error is 0
+We look at out of sample error
+```{r}
 prediction <- predict(rf, newdata=testDat)
 confusionMatrix(prediction,testDat$classe)
 ```
-Read test set, select column
-Validate the result on set of test data (20 values)
+This shows that the model gives out high accuracy of 0.9939 or 99.39%. In fact, by calculating the out of sample error (the cross-validation estimate is an out-of-sample estimate), we see that the sample error rate is about 0.0061 or 0.61%  
+
+Using above model, we have the predictions for the test dataset:
 ```{r}
 
 df2 <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!") )
@@ -75,9 +81,12 @@ df2<- as.data.frame(lapply(df2[-ncol(df2)],as.numeric))
 
 
 df2 <- df2[features[features!='classe']]
-answers <- predict(rf, newdata=df2)
-answers
+predictTest <- predict(rf, newdata=df2)
+predictTest
 
+```
+We can output the prediction in files
+```{r}
 pml_write_files = function(x){
   n = length(x)
   for(i in 1:n){
@@ -86,4 +95,4 @@ pml_write_files = function(x){
   }
 }
 
-pml_write_files(answers)
+pml_write_files(predictTest)

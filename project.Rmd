@@ -70,7 +70,7 @@ We look at out of sample error
 prediction <- predict(rf, newdata=testDat)
 confusionMatrix(prediction,testDat$classe)
 ```
-This shows that the model gives out high accuracy of 0.9939 or 99.39%. In fact, by calculating the out of sample error (the cross-validation estimate is an out-of-sample estimate), we see that the sample error rate is about 0.0061 or 0.61%  
+This shows that the model gives out high accuracy of 0.9939 or 99.39%. Since we choose Random Forest, there is no need for cross-validation to get an unbiased estimate of the test set error. It is estimated internally , during the run. In fact, by calculating the out of sample error (the cross-validation estimate is an out-of-sample estimate), we see that the sample error rate is about 0.0061 or 0.61%  
 
 Using above model, we have the predictions for the test dataset:
 ```{r}
